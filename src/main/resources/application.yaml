@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: QLITUYENDUNG
+    password: Admin123
+    driver-class-name: oracle.jdbc.OracleDriver
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    enabled: true
+    cache: false
+    mode: HTML
+
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 23520846@gm.uit.edu.vn
+    password: "knvx kktp uffh mxrs"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+# Optional: server port
+server:
+  port: 8080

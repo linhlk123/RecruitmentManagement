@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tuyển Dụng</title>
+    <link rel="stylesheet" th:href="@{/css/recruiter.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="company-info">
+                <img th:src="@{/images/logo_transparent.png}" alt="Logo công ty" class="company-logo">
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="#job-posts"><i class="fas fa-briefcase"></i> Tin Tuyển Dụng</a></li>
+                <li><a href="#candidates"><i class="fas fa-users"></i> Ứng Viên</a></li>
+                <li><a href="#tests"><i class="fas fa-tasks"></i> Bài Test</a></li>
+                <li><a href="#interviews"><i class="fas fa-calendar"></i> Lịch Phỏng Vấn</a></li>
+                <li><a href="#evaluations"><i class="fas fa-star"></i> Đánh Giá</a></li>
+                <li><a href="#account"><i class="fas fa-cog"></i> Tài Khoản</a></li>
+                <li><a href="#messages"><i class="fas fa-envelope"></i> Thông Báo</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Tìm kiếm...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="user-menu">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <div class="user-profile">
+                        <form action="/user/logout" method="post" style="display:inline;">
+                            <button type="submit" class="btn-logout" style="background:none; border:none; color:black; cursor:pointer;">
+                                <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Job Posts Section -->
+            <section id="job-posts" class="content-section">
+                <div class="section-header">
+                    <h2>Danh Sách Tin Tuyển Dụng</h2>
+                    <button class="btn-primary"><i class="fas fa-plus"></i> Tạo Tin Mới</button>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tiêu Đề</th>
+                                <th>Ngày Đăng</th>
+                                <th>Hạn Nộp</th>
+                                <th>Số Lượng Ứng Viên</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobPostsTableBody">
+                            <!-- Dữ liệu bài đăng sẽ được hiển thị tại đây -->
+                        </tbody>
+
+                    </table>
+                </div>
+            </section>
+
+            <!-- Candidates Section -->
+            <section id="candidates" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Danh Sách Ứng Viên</h2>
+                </div>
+                    <div class="candidates-grid" id="candidatesGrid">
+                        <!-- Danh sách ứng viên sẽ được hiển thị tại đây -->
+                    </div>
+            </section>
+
+            <!-- Tests Section -->
+            <section id="tests" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Quản Lý Bài Test</h2>
+                    <button class="btn-primary"><i class="fas fa-plus"></i> Tạo Bài Test Mới</button>
+                </div>
+                <div class="tests-container">
+                    <div class="tests-list">
+                    </div>
+                    <div class="test-results">
+                        <h3>Kết Quả Test Gần Đây</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ứng Viên</th>
+                                    <th>Bài Test</th>
+                                    <th>Điểm</th>
+                                    <th>Thời Gian</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interviews Section -->
+            <section id="interviews" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Lịch Phỏng Vấn</h2>
+                    <div class="view-controls">
+                        <button class="btn-icon active" data-view="calendar"><i class="fas fa-calendar"></i></button>
+                        <button class="btn-icon" data-view="list"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <button class="btn-icon"><i class="fas fa-chevron-left"></i></button>
+                        <h3>Tháng 3, 2024</h3>
+                        <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid">
+                    </div>
+                </div>
+                <div class="interview-list hidden">
+                </div>
+            </section>
+
+    <!-- Evaluations Section -->
+    <section id="evaluations" class="content-section hidden">
+        <div class="section-header">
+            <h2>Đánh Giá Ứng Viên</h2>
+        </div>
+        <div class="evaluation-form">
+            <div class="form-group">
+                <label for="candidateSelect">Ứng viên</label>
+                <select id="candidateSelect" required>
+                    <option value="">Chọn ứng viên</option>
+                    <!-- Danh sách ứng viên sẽ được chèn ở đây thông qua JavaScript -->
+                </select>
+            </div>
+
+            <div class="evaluation-criteria">
+                <h3>Tiêu chí đánh giá</h3>
+
+                <!-- Kỹ năng chuyên môn -->
+                <div class="criteria-group">
+                    <label for="technical">Kỹ năng chuyên môn</label>
+                    <div class="rating">
+                        <input type="radio" id="technical-1" name="technical" value="1"><label for="technical-1">1</label>
+                        <input type="radio" id="technical-2" name="technical" value="2"><label for="technical-2">2</label>
+                        <input type="radio" id="technical-3" name="technical" value="3"><label for="technical-3">3</label>
+                        <input type="radio" id="technical-4" name="technical" value="4"><label for="technical-4">4</label>
+                        <input type="radio" id="technical-5" name="technical" value="5"><label for="technical-5">5</label>
+                    </div>
+                </div>
+
+                <!-- Kỹ năng giao tiếp -->
+                <div class="criteria-group">
+                    <label for="communication">Kỹ năng giao tiếp</label>
+                    <div class="rating">
+                        <input type="radio" id="communication-1" name="communication" value="1"><label for="communication-1">1</label>
+                        <input type="radio" id="communication-2" name="communication" value="2"><label for="communication-2">2</label>
+                        <input type="radio" id="communication-3" name="communication" value="3"><label for="communication-3">3</label>
+                        <input type="radio" id="communication-4" name="communication" value="4"><label for="communication-4">4</label>
+                        <input type="radio" id="communication-5" name="communication" value="5"><label for="communication-5">5</label>
+                    </div>
+                </div>
+
+                <!-- Nhận xét -->
+                <div class="form-group">
+                    <label for="comments">Nhận xét</label>
+                    <textarea id="comments" rows="4" placeholder="Nhập nhận xét của bạn"></textarea>
+                </div>
+
+                <!-- Kết luận -->
+                <div class="form-group">
+                    <label for="conclusion">Kết luận</label>
+                    <select id="conclusion" required>
+                        <option value="">Chọn kết luận</option>
+                        <option value="accept">Chấp nhận</option>
+                        <option value="reject">Từ chối</option>
+                        <option value="consider">Cân nhắc thêm</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Lưu đánh giá</button>
+            </div>
+        </div>
+    </section>
+
+
+            <!-- Account Section -->
+            <section id="account" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Quản Lý Tài Khoản</h2>
+                </div>
+                <div class="account-container">
+                    <div class="company-profile">
+                        <h3>Thông tin công ty</h3>
+                        <div class="logo-upload">
+                            <img src="company-logo.png" alt="Company Logo">
+                            <button class="btn-secondary"><i class="fas fa-camera"></i> Thay đổi logo</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Tên công ty</label>
+                            <input type="text" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <textarea rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="user-management">
+                        <h3>Quản lý người dùng</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button class="btn-primary mt-3"><i class="fas fa-plus"></i> Thêm người dùng</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section id="messages" class="content-section hidden">
+                <div class="section-header">
+                    <h2>Thông Báo & Tin Nhắn</h2>
+                </div>
+                <div class="notifications-container">
+                    <div class="notification-filters">
+                        <button class="btn-filter active">Tất cả</button>
+                        <button class="btn-filter">Chưa đọc</button>
+                        <button class="btn-filter">Ứng viên mới</button>
+                        <button class="btn-filter">Phỏng vấn</button>
+                    </div>
+                    <div class="notifications-list">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+ <!-- Modal for creating new job post -->
+<div id="createJobModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Tạo Tin Tuyển Dụng Mới</h2>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="createJobForm">
+            <div class="form-group">
+                <label for="jobTitle">Tiêu đề công việc *</label>
+                <input type="text" id="jobTitle" name="jobTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="company_id">Company ID *</label>
+                <input type="text" id="companyId" name="companyId" placeholder="Điền ID công ty" required>
+            </div>
+
+            <div class="form-group">
+                <label for="jobDescription">Mô tả công việc *</label>
+                <textarea id="jobDescription" name="jobDescription" rows="4" required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="jobQuantity">Số lượng cần tuyển *</label>
+                    <input type="number" id="jobQuantity" name="jobQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="jobLevel">Cấp bậc</label>
+                    <select id="jobLevel" name="jobLevel">
+                        <option value="intern">Thực tập sinh</option>
+                        <option value="fresher">Fresher</option>
+                        <option value="junior">Junior</option>
+                        <option value="senior">Senior</option>
+                        <option value="leader">Team Leader</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="jobSalary">Mức lương (VNĐ)</label>
+                    <input type="text" id="jobSalary" name="jobSalary" placeholder="VD: 15-20 triệu">
+                </div>
+                <div class="form-group">
+                    <label for="jobLocation">Địa điểm làm việc *</label>
+                    <input type="text" id="jobLocation" name="jobLocation" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="createdAt">Ngày đăng *</label>
+                    <input type="date" id="createdAt" name="createdAt" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Hạn nộp hồ sơ *</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="jobRequirements">Yêu cầu công việc *</label>
+                <textarea id="jobRequirements" name="jobRequirements" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="jobBenefits">Quyền lợi</label>
+                <textarea id="jobBenefits" name="jobBenefits" rows="4"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Hủy</button>
+                <button type="submit" class="btn-primary">Đăng tin</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <script th:src="@{/js/recruiter.js}"></script>
+</body>
+</html>
